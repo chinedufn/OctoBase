@@ -1,5 +1,6 @@
 #[cfg(feature = "api")]
 mod blocks;
+mod auth;
 
 use crate::sync::DbPool;
 
@@ -36,12 +37,18 @@ impl Context {
 }
 
 pub fn api_handler(router: Router) -> Router {
+    let mut router = router;
+    #[cfg(feature = "auth")]
+    {
+        router = auth::auth_apis(router);
+    }  
     #[cfg(feature = "api")]
     {
-        blocks::blocks_apis(router)
+        router = blocks::blocks_apis(router);
     }
     #[cfg(not(feature = "api"))]
     {
-        router
+        router = router
     }
+    router
 }
