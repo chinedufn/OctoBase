@@ -19,7 +19,7 @@ struct FailResponseError {
 
 #[derive(Debug)]
 pub enum FirebaseError {
-    Unauthorized,
+    Unauthorized(),
     InvaildWorkspace,
     Internal,
 }
