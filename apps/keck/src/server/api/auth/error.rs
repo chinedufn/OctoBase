@@ -4,22 +4,21 @@ use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct FailResponseBody {
-    code: usize,
-    message: String,
-    errors: Vec<FailResponseError>,
+pub struct FailResponse {
+    pub code: usize,
+    pub message: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct FailResponseError {
-    message: String,
-    domain: String,
-    reason: String,
+pub struct FailResponseError {
+    pub message: String,
+    pub domain: String,
+    pub reason: String,
 }
 
 #[derive(Debug)]
 pub enum FirebaseError {
-    Unauthorized(),
+    Unauthorized,
     InvaildWorkspace,
     Internal,
 }
