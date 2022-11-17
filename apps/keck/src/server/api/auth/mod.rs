@@ -8,7 +8,7 @@ use axum::{
     routing::{get, post},
     Json, Router,
 };
-use error::{FailResponse, FailResponseError};
+// use error::{FailResponse, FailResponseError};
 use http::{uri::Authority, StatusCode};
 use reqwest;
 use serde::{Deserialize, Serialize};
@@ -27,7 +27,7 @@ fn firebase_auth_url(v: &str, v2: &str) -> String {
 pub fn auth_apis(router: Router) -> Router {
     let api_handler = Router::new()
         .route("/gym", get(axum_gym))
-        .route("/sign_in", post(sign_in_email))
+        .route("/config/sign_in", post(sign_in_email))
         .route("/config/get_user_info", post(user::user_info))
         .route(
             "/config/get_workspace_info",
@@ -38,14 +38,10 @@ pub fn auth_apis(router: Router) -> Router {
 }
 
 async fn axum_gym() -> (StatusCode) {
-    let res = Json(FailResponse {
-        code: 200,
-        message: "test".into(),
-    });
     (StatusCode::FOUND)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct LoginRequest {
     pub email: String,
     pub password: String,
@@ -80,6 +76,8 @@ async fn sign_in_email(Json(login): Json<LoginRequest>) -> Response {
         password: login.password,
     };
 
+    println!("{:?}", login_info);
+
     let client = reqwest::Client::new();
 
     let resp = client
@@ -92,7 +90,7 @@ async fn sign_in_email(Json(login): Json<LoginRequest>) -> Response {
 
     if resp.status() != 200 {
         let res = resp.text().await.unwrap();
-        (StatusCode::NOT_FOUND, res.into_response()).into_response()
+        (StatusCode::NOT_FOUND, res).into_response()
     } else {
         let res = resp.text().await.unwrap();
         let res = serde_json::from_str::<LoginResponse>(&res).unwrap();
