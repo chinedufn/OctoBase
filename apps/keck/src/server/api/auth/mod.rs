@@ -9,7 +9,7 @@ use axum::{
     Json, Router,
 };
 // use error::{FailResponse, FailResponseError};
-use http::{uri::Authority, StatusCode};
+use http::{response, uri::Authority, StatusCode};
 use reqwest;
 use serde::{Deserialize, Serialize};
 
@@ -30,15 +30,15 @@ pub fn auth_apis(router: Router) -> Router {
         .route("/config/sign_in", post(sign_in_email))
         .route("/config/get_user_info", post(user::user_info))
         .route(
-            "/config/get_workspace_info",
+            "/config/get_workspace_info/:collection/:document",
             post(workspace::workspace_info),
         );
 
     router.nest("/api", api_handler)
 }
 
-async fn axum_gym() -> (StatusCode) {
-    (StatusCode::FOUND)
+async fn axum_gym() -> Response {
+    (StatusCode::FOUND).into_response()
 }
 
 #[derive(Debug, Deserialize, Serialize)]
