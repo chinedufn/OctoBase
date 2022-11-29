@@ -40,7 +40,9 @@ pub struct UpdateWorkspace {
     pub public: Option<bool>,
 }
 
-pub struct DeleteWorkspace {}
+// request payload for delete /api/workspace
+
+// response payload for delete /api/workspace
 
 pub async fn get_workspace_info() -> Workspace {
     Workspace {
