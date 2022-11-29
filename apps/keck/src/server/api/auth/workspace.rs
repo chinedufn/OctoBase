@@ -14,7 +14,7 @@ pub struct Workspace {
     pub name: String,
     pub workspace_type: WorkspaceType,
     pub avater_url: String,
-    pub permissions: Vec<String>,
+    pub public: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -23,13 +23,32 @@ pub enum WorkspaceType {
     team,
 }
 
+// responese payload for put /api/workspace
+pub struct CreateWorkspace {
+    pub name: String,
+    pub avatar_url: Option<String>,
+    pub workspace_type: WorkspaceType,
+}
+
+// request payload for post /api/workspace
+// id string
+
+// response payload for post /api/workspace
+pub struct UpdateWorkspace {
+    pub name: Option<String>,
+    pub avatar_url: Option<String>,
+    pub public: Option<bool>,
+}
+
+pub struct DeleteWorkspace {}
+
 pub async fn get_workspace_info() -> Workspace {
     Workspace {
         id: "fasdf".into(),
         name: "affine workspace".into(),
         workspace_type: WorkspaceType::team,
         avater_url: "https://workspace.affine.pro/avatar.png".into(),
-        permissions: vec!["read".into()],
+        public: true,
     }
 }
 

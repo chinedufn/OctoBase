@@ -1,4 +1,5 @@
 mod error;
+mod invite;
 mod user;
 mod workspace;
 
